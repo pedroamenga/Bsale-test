@@ -4,6 +4,8 @@ const mysql = require('mysql');
 const bodyParser = require('body-parser');
 const PORT = process.env.PORT || 3000;
 
+const API_URL = 'mdb-test.c6vunyturrl6.us-west-1.rds.amazonaws.com';
+
 app.use(bodyParser.json());
 
 const connection = mysql.createConnection({
@@ -14,17 +16,13 @@ const connection = mysql.createConnection({
 });
 
 app.get('/', (req, res) => {
-    let id = req.params.id
-    let nombre = req.params.nombre
-    todos = obtenerContactos()
-    res.render('index', {nobmre, id})
-    res.send('Bienvenido a la API! :D')
+    res.send('Bienvenido a la API! :)')
 });
 
 //all products
 app.get('/product', (req, res) => {
     const sql = 'SELECT * FROM bsale_test';
-
+    
     connection.query(sql, (error, results) => {
         if (error) throw error;
         if (results.lenght > 0){
@@ -93,8 +91,23 @@ connection.connect(function(error){
     }
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on localhost:${PORT}`));
 
+
+const HTMLResponse = document.querySelector("#product")
+const ul = document.createElement("ul");
+
+fetch(`${API_URL}`)
+    .then((res) => res.json())
+    .then((producto) => {
+        let elem = document.createElement("li");
+        elem.appendChild(
+            document.createTextNode(`${product.name}`)
+        );
+        ul.appendChild(elem);
+    });
+
+    HTMLResponse.appendChild(ul);
 
 //query de la BD
 //connection.query('SELECT * from users', function(error, results){
